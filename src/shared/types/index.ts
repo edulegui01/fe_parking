@@ -37,6 +37,8 @@ export interface ConsultaMontoData {
   descuento_porcentaje: number;
   iva_porcentaje: number;
   tarifa_calculada: number;
+  monto_iva: number | null;
+  monto_gravado: number | null;
   monto_total: number;
   tiempo_transcurrido: string;
   facturado: string;
@@ -46,15 +48,16 @@ export interface ConsultaMontoData {
     fecha_factura: string;
   }[];
   paciente: {
-    paciente: string;
+    paciente: string | null;
     ruc: string | null;
     pasaporte: string | null;
-    id_grupo: number;
-    secuencia: number;
-    id_expediente: number;
-    email: string;
-    porc_iva: number;
+    id_grupo: number | null;
+    secuencia: number | null;
+    id_expediente: number | null;
+    email: string | null;
+    porc_iva: number | null;
     descuento: number;
+    message?: string;
   };
 }
 

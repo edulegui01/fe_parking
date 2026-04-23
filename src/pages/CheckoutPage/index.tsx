@@ -20,6 +20,17 @@ export default function CheckoutPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 select-none px-10 py-10">
 
+      {/* Paciente */}
+      <div className="mb-8 text-center">
+        {ticketData.paciente.paciente ? (
+          <p className="text-3xl font-bold text-sky-400">{ticketData.paciente.paciente}</p>
+        ) : (
+          <p className="text-2xl font-medium text-amber-400">
+            {ticketData.paciente.message ?? "Sin datos de documento"}
+          </p>
+        )}
+      </div>
+
       {/* Monto */}
       <div className="flex flex-col items-center mb-14">
         <p className="text-2xl font-semibold text-slate-400 uppercase tracking-widest mb-4">
