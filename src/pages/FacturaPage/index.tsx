@@ -182,21 +182,26 @@ export default function FacturaPage() {
         <p className="text-2xl text-slate-400 mb-10">Ingrese su número de RUC</p>
 
         {/* Display RUC */}
-        <div
-          className={`w-full max-w-lg rounded-3xl border-2 px-8 py-7 mb-4 transition-all duration-200 ${
+        <div className="flex items-center gap-3 w-full max-w-lg mb-4">
+          <div className={`flex-1 rounded-3xl border-2 px-8 py-7 transition-all duration-200 ${
             error ? "border-red-500 bg-red-950/30" : rucBase ? "border-sky-500 bg-slate-800" : "border-slate-700 bg-slate-800"
-          }`}
-        >
-          <p className="text-slate-400 text-lg font-semibold uppercase tracking-widest mb-3">RUC</p>
-          {rucBase ? (
-            <div className="flex items-baseline gap-3">
-              <span className="text-6xl font-mono font-black text-white tracking-wider">{rucBase}</span>
-              <span className="text-4xl font-mono font-bold text-slate-500">-</span>
-              <span className="text-6xl font-mono font-black text-sky-400">{dv}</span>
-            </div>
-          ) : (
-            <span className="text-5xl font-mono text-slate-600">———</span>
-          )}
+          }`}>
+            <p className="text-slate-400 text-lg font-semibold uppercase tracking-widest mb-3">Documento</p>
+            <span className="text-6xl font-mono font-black text-white tracking-wider">
+              {rucBase || <span className="text-slate-600">———</span>}
+            </span>
+          </div>
+
+          <span className="text-5xl font-bold text-slate-500">-</span>
+
+          <div className={`w-36 rounded-3xl border-2 px-6 py-7 transition-all duration-200 ${
+            rucBase ? "border-sky-500 bg-slate-800" : "border-slate-700 bg-slate-800"
+          }`}>
+            <p className="text-slate-400 text-lg font-semibold uppercase tracking-widest mb-3">DV</p>
+            <span className="text-6xl font-mono font-black text-sky-400">
+              {rucBase ? dv : <span className="text-slate-600">-</span>}
+            </span>
+          </div>
         </div>
 
         <div className="h-9 flex items-center mb-6">
