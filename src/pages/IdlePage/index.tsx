@@ -1,8 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCheckout } from "@/store/checkout.hook";
-import fondoImg from "@/assets/la_costa_fondo.jpg";
-import logoImg from "@/assets/la_costa_logo.jpg";
 
 export default function IdlePage() {
   const navigate = useNavigate();
@@ -28,38 +26,14 @@ export default function IdlePage() {
   }, [navigate, setQrCode]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center h-screen select-none overflow-hidden">
-      {/* Fondo */}
-      {/* Imagen desenfocada como relleno de fondo */}
-      <img
-        src={fondoImg}
-        alt=""
-        className="absolute inset-0 w-full h-full object-cover object-top blur-sm scale-110"
-        aria-hidden="true"
-      />
-      {/* Imagen principal centrada sin recorte */}
-      <img
-        src={fondoImg}
-        alt=""
-        className="absolute inset-0 w-full h-full object-contain object-top"
-        aria-hidden="true"
-      />
-      {/* Overlay oscuro para legibilidad */}
-      <div className="absolute inset-0 bg-black/40" />
-
-      <div className="relative z-10 flex flex-col items-center gap-10">
-        {/* Logo */}
-        <img
-          src={logoImg}
-          alt="Logo La Costa"
-          className="w-64 object-contain drop-shadow-xl rounded-2xl"
-        />
+    <div className="flex flex-col items-center justify-center h-screen bg-navy-900 select-none overflow-hidden">
+      <div className="flex flex-col items-center gap-10">
 
         {/* Ícono QR */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
-          className="w-28 h-28 text-white drop-shadow-lg"
+          className="w-28 h-28 text-ocean-400"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
@@ -82,10 +56,10 @@ export default function IdlePage() {
 
         {/* Mensaje */}
         <div className="text-center">
-          <p className="text-5xl font-bold text-white drop-shadow-lg leading-snug">
+          <p className="text-5xl font-bold text-white leading-snug">
             Coloque el código QR
           </p>
-          <p className="text-5xl font-bold text-white drop-shadow-lg leading-snug">
+          <p className="text-5xl font-bold text-white leading-snug">
             en el lector
           </p>
         </div>
@@ -97,7 +71,7 @@ export default function IdlePage() {
               key={i}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 12"
-              className="w-14 h-7 text-white drop-shadow-lg"
+              className="w-14 h-7 text-ocean-400"
               style={{
                 animation: "bounce-fade 1.4s ease-in-out infinite",
                 animationDelay: `${i * 0.2}s`,
