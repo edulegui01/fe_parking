@@ -4,8 +4,10 @@ import { api, ApiError } from "../../shared/services/api";
 import { Button } from "../../shared/components/Button";
 import type { ApiResponse, ContribuyenteData } from "../../shared/types";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 function validarEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+  return EMAIL_REGEX.test(email.trim());
 }
 
 function calcularDV(base: string): string {
@@ -53,7 +55,7 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
         <div
           key={i}
           className={`rounded-full transition-all duration-300 ${
-            i < current ? "w-10 h-3 bg-sky-400" : i === current ? "w-10 h-3 bg-sky-500" : "w-3 h-3 bg-slate-600"
+            i < current ? "w-10 h-3 bg-ocean-400" : i === current ? "w-10 h-3 bg-ocean-500" : "w-3 h-3 bg-navy-700"
           }`}
         />
       ))}
@@ -81,7 +83,7 @@ function FieldCard({
       onClick={onClick}
       className={`flex flex-col gap-2 px-8 py-6 rounded-3xl border-2 transition-all duration-200 ${
         onClick ? "cursor-pointer" : ""
-      } ${active ? "border-sky-400 bg-slate-700/60" : "border-slate-600 bg-slate-800/60"}`}
+      } ${active ? "border-ocean-400 bg-navy-700/60" : "border-white/10 bg-navy-800/60"}`}
     >
       <span className="text-base font-bold text-slate-400 uppercase tracking-widest">{label}</span>
       <span
@@ -175,7 +177,7 @@ export default function FacturaPage() {
 
   if (step === "ruc") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 select-none px-10 py-10">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
         {/* Header */}
         <StepIndicator current={0} total={3} />
         <p className="text-6xl font-black text-white mt-8 mb-2 tracking-tight">Factura</p>
@@ -184,7 +186,7 @@ export default function FacturaPage() {
         {/* Display RUC */}
         <div className="flex items-center gap-3 w-full max-w-lg mb-4">
           <div className={`flex-1 rounded-3xl border-2 px-8 py-7 transition-all duration-200 ${
-            error ? "border-red-500 bg-red-950/30" : rucBase ? "border-sky-500 bg-slate-800" : "border-slate-700 bg-slate-800"
+            error ? "border-red-500 bg-red-950/30" : rucBase ? "border-ocean-400 bg-navy-800" : "border-white/10 bg-navy-800"
           }`}>
             <p className="text-slate-400 text-lg font-semibold uppercase tracking-widest mb-3">Documento</p>
             <span className="text-6xl font-mono font-black text-white tracking-wider">
@@ -195,10 +197,10 @@ export default function FacturaPage() {
           <span className="text-5xl font-bold text-slate-500">-</span>
 
           <div className={`w-36 rounded-3xl border-2 px-6 py-7 transition-all duration-200 ${
-            rucBase ? "border-sky-500 bg-slate-800" : "border-slate-700 bg-slate-800"
+            rucBase ? "border-ocean-400 bg-navy-800" : "border-white/10 bg-navy-800"
           }`}>
             <p className="text-slate-400 text-lg font-semibold uppercase tracking-widest mb-3">DV</p>
-            <span className="text-6xl font-mono font-black text-sky-400">
+            <span className="text-6xl font-mono font-black text-ocean-400">
               {rucBase ? dv : <span className="text-slate-600">-</span>}
             </span>
           </div>
@@ -226,7 +228,7 @@ export default function FacturaPage() {
                       ? "bg-red-900/60 text-red-400 border-2 border-red-800 active:bg-red-900"
                       : key === "C"
                       ? "bg-amber-900/60 text-amber-400 border-2 border-amber-800 active:bg-amber-900"
-                      : "bg-slate-700 text-white border-2 border-slate-600 active:bg-slate-600 shadow-lg shadow-black/30",
+                      : "bg-navy-700 text-white border border-white/10 active:bg-navy-600 shadow-lg shadow-black/40",
                   ].join(" ")}
                 >
                   {key === "C" ? <span className="text-2xl">Limpiar</span> : key}
@@ -240,7 +242,7 @@ export default function FacturaPage() {
         <button
           onClick={handleConsultar}
           disabled={!canConfirmRuc}
-          className="w-full max-w-lg py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-green-500 text-white shadow-2xl shadow-green-900/50 disabled:shadow-none"
+          className="w-full max-w-lg py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-3">
@@ -264,7 +266,7 @@ export default function FacturaPage() {
 
   if (step === "email_only") {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 select-none px-10 py-10">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
         <StepIndicator current={1} total={3} />
         <p className="text-6xl font-black text-white mt-8 mb-2 tracking-tight">Factura</p>
         <p className="text-2xl text-slate-400 mb-8">Ingrese su correo electrónico</p>
@@ -309,7 +311,7 @@ export default function FacturaPage() {
                       isWide ? "px-7" : "w-[52px]",
                       key === "←"
                         ? "bg-red-900/60 text-red-400 border-2 border-red-800"
-                        : "bg-slate-700 text-white border-2 border-slate-600 active:bg-slate-600",
+                        : "bg-navy-700 text-white border border-white/10 active:bg-navy-600",
                     ].join(" ")}
                   >
                     {key === "SPACE" ? "espacio" : key}
@@ -323,7 +325,7 @@ export default function FacturaPage() {
         <button
           onClick={handleConfirmarDetails}
           disabled={!canConfirmDetails}
-          className="w-full max-w-2xl py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-green-500 text-white shadow-2xl shadow-green-900/50 disabled:shadow-none"
+          className="w-full max-w-2xl py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
         >
           Confirmar
         </button>
@@ -338,7 +340,7 @@ export default function FacturaPage() {
   // ── Step 2b: razón social + email ─────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-slate-900 select-none px-10 pt-14 pb-10">
+    <div className="flex flex-col items-center min-h-screen bg-navy-900 select-none px-10 pt-14 pb-10">
       <StepIndicator current={1} total={3} />
       <p className="text-6xl font-black text-white mt-8 mb-2 tracking-tight">Factura</p>
 
@@ -380,12 +382,12 @@ export default function FacturaPage() {
                     className={[
                       "h-16 rounded-2xl text-2xl font-bold transition-all active:scale-90",
                       key === "SPACE"
-                        ? "px-10 bg-slate-600 text-slate-200 border-2 border-slate-500"
+                        ? "px-10 bg-navy-700 text-slate-200 border border-white/10"
                         : key === "←"
                         ? "px-5 bg-red-900/60 text-red-400 border-2 border-red-800"
                         : key === "," || key === "."
-                        ? "w-16 bg-slate-600 text-slate-200 border-2 border-slate-500"
-                        : "w-[52px] bg-slate-700 text-white border-2 border-slate-600 active:bg-slate-600",
+                        ? "w-16 bg-navy-700 text-slate-200 border border-white/10"
+                        : "w-[52px] bg-navy-700 text-white border border-white/10 active:bg-navy-600",
                     ].join(" ")}
                   >
                     {key === "SPACE" ? "espacio" : key}
@@ -396,7 +398,7 @@ export default function FacturaPage() {
           </div>
           <button
             onClick={() => setActiveField("email")}
-            className="w-full max-w-2xl py-7 mb-4 rounded-3xl bg-sky-600 text-white text-3xl font-black active:scale-95 transition-all shadow-lg shadow-sky-900/50"
+            className="w-full max-w-2xl py-7 mb-4 rounded-3xl bg-ocean-400 text-white text-3xl font-black active:scale-95 transition-all shadow-lg shadow-ocean-400/20"
           >
             Siguiente →
           </button>
@@ -420,7 +422,7 @@ export default function FacturaPage() {
                         isWide ? "px-7" : "w-[52px]",
                         key === "←"
                           ? "bg-red-900/60 text-red-400 border-2 border-red-800"
-                          : "bg-slate-700 text-white border-2 border-slate-600 active:bg-slate-600",
+                          : "bg-navy-700 text-white border border-white/10 active:bg-navy-600",
                       ].join(" ")}
                     >
                       {key === "SPACE" ? "espacio" : key}
@@ -433,7 +435,7 @@ export default function FacturaPage() {
           <button
             onClick={handleConfirmarDetails}
             disabled={!canConfirmDetails}
-            className="w-full max-w-2xl py-8 mb-4 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-green-500 text-white shadow-2xl shadow-green-900/50 disabled:shadow-none"
+            className="w-full max-w-2xl py-8 mb-4 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
           >
             Confirmar
           </button>

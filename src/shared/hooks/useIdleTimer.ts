@@ -1,25 +1,34 @@
 import { useEffect, useRef } from 'react';
 
-/**
- * Ejecuta `onIdle` si el usuario no interactúa en `timeoutMs` milisegundos.
- * Útil para volver a la pantalla de inicio en un kiosk.
- */
 export function useIdleTimer(onIdle: () => void, timeoutMs = 60_000) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onIdleRef = useRef(onIdle);
+
+  useEffect(() => {
+    onIdleRef.current = onIdle;
+  }, [onIdle]);
 
   useEffect(() => {
     const reset = () => {
       if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(onIdle, timeoutMs);
+      timer.current = setTimeout(() => onIdleRef.current(), timeoutMs);
     };
 
-    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
-    events.forEach((e) => window.addEventListener(e, reset));
+    const passive = { passive: true } as const;
+    window.addEventListener('mousemove', reset);
+    window.addEventListener('mousedown', reset);
+    window.addEventListener('keydown', reset);
+    window.addEventListener('touchstart', reset, passive);
+    window.addEventListener('scroll', reset, passive);
     reset();
 
     return () => {
       if (timer.current) clearTimeout(timer.current);
-      events.forEach((e) => window.removeEventListener(e, reset));
+      window.removeEventListener('mousemove', reset);
+      window.removeEventListener('mousedown', reset);
+      window.removeEventListener('keydown', reset);
+      window.removeEventListener('touchstart', reset);
+      window.removeEventListener('scroll', reset);
     };
-  }, [onIdle, timeoutMs]);
+  }, [timeoutMs]);
 }

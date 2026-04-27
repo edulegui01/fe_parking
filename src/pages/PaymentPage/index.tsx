@@ -19,7 +19,7 @@ export default function PaymentPage() {
   if (!state.ticketData) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 select-none px-10 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
       <p className="text-6xl font-black text-white mb-3 tracking-tight">Pago</p>
       <p className="text-2xl text-slate-400 mb-14">Seleccione un método de pago</p>
 
@@ -28,7 +28,7 @@ export default function PaymentPage() {
         <button
           onClick={() => pay('card' as const)}
           disabled={loading}
-          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-slate-800 border-2 border-slate-700 active:border-blue-500 active:bg-slate-700 transition-all active:scale-95 disabled:opacity-40"
+          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-blue-500 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
         >
           <div className="w-20 h-20 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
             <svg className="w-10 h-10 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -46,10 +46,10 @@ export default function PaymentPage() {
         <button
           onClick={() => pay('qr' as const)}
           disabled={loading}
-          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-slate-800 border-2 border-slate-700 active:border-emerald-500 active:bg-slate-700 transition-all active:scale-95 disabled:opacity-40"
+          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-ocean-400 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
         >
-          <div className="w-20 h-20 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center flex-shrink-0">
-            <svg className="w-10 h-10 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="w-20 h-20 rounded-2xl bg-ocean-400/20 border border-ocean-400/30 flex items-center justify-center flex-shrink-0">
+            <svg className="w-10 h-10 text-ocean-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <rect x="3" y="3" width="7" height="7" rx="1" />
               <rect x="14" y="3" width="7" height="7" rx="1" />
               <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -72,8 +72,8 @@ export default function PaymentPage() {
       </div>
 
       {loading && (
-        <div className="mt-10 flex items-center gap-3 bg-slate-800 border border-slate-700 rounded-2xl px-7 py-4">
-          <svg className="animate-spin w-6 h-6 text-sky-400" fill="none" viewBox="0 0 24 24">
+        <div className="mt-10 flex items-center gap-3 bg-navy-800 border border-white/10 rounded-2xl px-7 py-4">
+          <svg className="animate-spin w-6 h-6 text-ocean-400" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>

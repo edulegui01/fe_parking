@@ -49,14 +49,14 @@ export default function DocumentPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-900 select-none px-10 py-10">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
       <p className="text-6xl font-black text-white mb-3 tracking-tight">Documento</p>
       <p className="text-2xl text-slate-400 mb-10">Ingrese su cédula sin puntos</p>
 
       {/* Display */}
       <div
-        className={`w-full max-w-lg py-8 px-8 rounded-3xl border-2 text-center mb-4 transition-all duration-200 bg-slate-800 ${
-          error ? "border-red-500" : documento ? "border-sky-500" : "border-slate-700"
+        className={`w-full max-w-lg py-8 px-8 rounded-3xl border-2 text-center mb-4 transition-all duration-200 bg-navy-800 ${
+          error ? "border-red-500" : documento ? "border-ocean-400" : "border-white/10"
         }`}
       >
         <p className="text-7xl font-mono font-black tracking-widest min-h-[80px] text-white">
@@ -87,7 +87,7 @@ export default function DocumentPage() {
                     ? "bg-red-900/60 text-red-400 border-2 border-red-800 active:bg-red-900"
                     : key === "C"
                     ? "bg-amber-900/60 text-amber-400 border-2 border-amber-800 active:bg-amber-900"
-                    : "bg-slate-700 text-white border-2 border-slate-600 active:bg-slate-600 shadow-lg shadow-black/30",
+                    : "bg-navy-700 text-white border border-white/10 active:bg-navy-600 shadow-lg shadow-black/40",
                 ].join(" ")}
               >
                 {key === "C" ? <span className="text-2xl">Limpiar</span> : key}
@@ -101,7 +101,7 @@ export default function DocumentPage() {
       <button
         onClick={handleConfirm}
         disabled={!canConfirm}
-        className="w-full max-w-lg py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-green-500 text-white shadow-2xl shadow-green-900/50 disabled:shadow-none"
+        className="w-full max-w-lg py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-3">
