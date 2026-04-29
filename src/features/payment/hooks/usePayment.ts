@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { paymentService } from '../services/payment.service';
 import { useCheckout } from '../../../store/checkout.hook';
 import type { PagoData, PagoResultData, ApiResponse } from '../../../shared/types';
@@ -7,15 +7,15 @@ import type { PagoData, PagoResultData, ApiResponse } from '../../../shared/type
 type FacturaState = { ruc?: string; razon_social?: string; email?: string };
 
 export function usePayment() {
-  const { state, paymentSuccess, paymentError } = useCheckout();
+  const { state, paymentSuccess, paymentError, setIsPaying } = useCheckout();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
   const factura = (location.state as { factura?: FacturaState } | null)?.factura;
 
   async function pay(method: 'card' | 'qr') {
     if (!state.ticketData) return;
     setLoading(true);
+    setIsPaying(true);
 
     const payload: PagoData = {
       ticket_code: state.ticketData.codigo_ticket,
@@ -31,11 +31,10 @@ export function usePayment() {
         ? await paymentService.pagarTarjeta(payload)
         : await paymentService.pagarQr(payload);
       paymentSuccess(res.data!);
-      navigate('/confirmation');
     } catch (e) {
       paymentError(e instanceof Error ? e.message : 'Error al procesar el pago');
-      navigate('/confirmation');
     } finally {
+      setIsPaying(false);
       setLoading(false);
     }
   }

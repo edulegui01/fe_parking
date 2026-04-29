@@ -184,7 +184,7 @@ export default function FacturaPage() {
         <p className="text-2xl text-slate-400 mb-10">Ingrese su número de RUC</p>
 
         {/* Display RUC */}
-        <div className="flex items-center gap-3 w-full max-w-lg mb-4">
+        <div className="flex items-center gap-3 w-full max-w-2xl mb-4">
           <div className={`flex-1 rounded-3xl border-2 px-8 py-7 transition-all duration-200 ${
             error ? "border-red-500 bg-red-950/30" : rucBase ? "border-ocean-400 bg-navy-800" : "border-white/10 bg-navy-800"
           }`}>
@@ -215,15 +215,15 @@ export default function FacturaPage() {
         </div>
 
         {/* PIN pad */}
-        <div className="flex flex-col gap-4 mb-10">
+        <div className="flex flex-col gap-4 w-full max-w-2xl mb-10">
           {NUM_KEYS.map((row, ri) => (
-            <div key={ri} className="flex gap-4 justify-center">
+            <div key={ri} className="flex gap-4">
               {row.map((key) => (
                 <button
                   key={key}
                   onClick={() => handleNumKey(key)}
                   className={[
-                    "w-40 h-28 rounded-3xl text-5xl font-bold transition-all duration-100 active:scale-90",
+                    "flex-1 h-28 rounded-3xl text-5xl font-bold transition-all duration-100 active:scale-90",
                     key === "←"
                       ? "bg-red-900/60 text-red-400 border-2 border-red-800 active:bg-red-900"
                       : key === "C"
@@ -242,7 +242,7 @@ export default function FacturaPage() {
         <button
           onClick={handleConsultar}
           disabled={!canConfirmRuc}
-          className="w-full max-w-lg py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
+          className="w-full max-w-2xl py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
         >
           {loading ? (
             <span className="flex items-center justify-center gap-3">
@@ -255,7 +255,7 @@ export default function FacturaPage() {
           ) : "Confirmar"}
         </button>
 
-        <Button variant="back" className="mt-4 max-w-lg" onClick={() => navigate(-1 as never)}>
+        <Button variant="back" className="mt-4 max-w-2xl" onClick={() => navigate(-1 as never)}>
           Cancelar
         </Button>
       </div>

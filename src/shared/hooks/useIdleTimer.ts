@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export function useIdleTimer(onIdle: () => void, timeoutMs = 60_000) {
+export function useIdleTimer(onIdle: () => void, timeoutMs = 60_000, paused = false) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onIdleRef = useRef(onIdle);
 
@@ -9,6 +9,11 @@ export function useIdleTimer(onIdle: () => void, timeoutMs = 60_000) {
   }, [onIdle]);
 
   useEffect(() => {
+    if (paused) {
+      if (timer.current) clearTimeout(timer.current);
+      return;
+    }
+
     const reset = () => {
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => onIdleRef.current(), timeoutMs);
@@ -30,5 +35,5 @@ export function useIdleTimer(onIdle: () => void, timeoutMs = 60_000) {
       window.removeEventListener('touchstart', reset);
       window.removeEventListener('scroll', reset);
     };
-  }, [timeoutMs]);
+  }, [timeoutMs, paused]);
 }

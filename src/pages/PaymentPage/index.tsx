@@ -2,19 +2,24 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCheckout } from '../../store/checkout.hook';
 import { usePayment } from '../../features/payment/hooks/usePayment';
-import { useIdleTimer } from '../../shared/hooks/useIdleTimer';
 import { Button } from '../../shared/components/Button';
 
 export default function PaymentPage() {
   const { state, reset } = useCheckout();
   const { pay, loading } = usePayment();
   const navigate = useNavigate();
-
-  useIdleTimer(() => { reset(); navigate('/'); }, 60_000);
+  const isDone = state.status === 'success' || state.status === 'error';
+  const isSuccess = state.status === 'success';
 
   useEffect(() => {
     if (!state.ticketData) navigate('/');
   }, [state.ticketData, navigate]);
+
+  useEffect(() => {
+    if (!isDone) return;
+    const timer = setTimeout(() => { reset(); navigate('/'); }, 5_000);
+    return () => clearTimeout(timer);
+  }, [isDone, reset, navigate]);
 
   if (!state.ticketData) return null;
 
@@ -23,11 +28,11 @@ export default function PaymentPage() {
       <p className="text-6xl font-black text-white mb-3 tracking-tight">Pago</p>
       <p className="text-2xl text-slate-400 mb-14">Seleccione un método de pago</p>
 
-      <div className="flex flex-col gap-5 w-full max-w-lg">
+      <div className="flex flex-col gap-5 w-full max-w-2xl">
         {/* Tarjeta */}
         <button
           onClick={() => pay('card' as const)}
-          disabled={loading}
+          disabled={loading || isDone}
           className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-blue-500 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
         >
           <div className="w-20 h-20 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
@@ -45,7 +50,7 @@ export default function PaymentPage() {
         {/* QR */}
         <button
           onClick={() => pay('qr' as const)}
-          disabled={loading}
+          disabled={loading || isDone}
           className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-ocean-400 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
         >
           <div className="w-20 h-20 rounded-2xl bg-ocean-400/20 border border-ocean-400/30 flex items-center justify-center flex-shrink-0">
@@ -81,9 +86,61 @@ export default function PaymentPage() {
         </div>
       )}
 
-      <Button variant="back" className="mt-8 max-w-lg" onClick={() => navigate('/checkout')}>
+      <Button variant="back" className="mt-8 max-w-2xl" onClick={() => navigate('/checkout')}>
         Volver
       </Button>
+
+      {/* Modal de resultado */}
+      {isDone && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
+          <div className="flex flex-col items-center gap-6 text-center bg-navy-800 border border-white/10 rounded-3xl px-14 py-12 mx-6">
+
+            {/* Ícono */}
+            <div className="relative flex items-center justify-center">
+              {isSuccess && (
+                <div
+                  className="absolute w-36 h-36 rounded-full bg-green-500/10 animate-ping"
+                  style={{ animationDuration: '2s' }}
+                />
+              )}
+              <div className={`relative w-28 h-28 rounded-full flex items-center justify-center ${
+                isSuccess
+                  ? 'bg-green-500/15 border-2 border-green-500/60'
+                  : 'bg-red-500/15 border-2 border-red-500/60'
+              }`}>
+                {isSuccess ? (
+                  <svg className="w-16 h-16 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-16 h-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+              </div>
+            </div>
+
+            {/* Mensaje */}
+            <h2 className={`text-4xl font-black tracking-tight ${isSuccess ? 'text-green-400' : 'text-red-400'}`}>
+              {isSuccess ? '¡Pago exitoso!' : 'Error en el pago'}
+            </h2>
+
+            {isSuccess && state.paymentResult && (
+              <p className="text-2xl font-mono font-bold text-slate-300 tracking-widest">
+                #{state.paymentResult.codigo_ticket}
+              </p>
+            )}
+
+            {!isSuccess && (
+              <p className="text-lg text-slate-400">
+                {state.error ?? 'Ocurrió un error. Intente nuevamente.'}
+              </p>
+            )}
+
+            <p className="text-slate-600 text-sm">Volviendo al inicio...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

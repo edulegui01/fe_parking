@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import type { ReactNode } from "react";
 import type { ConsultaMontoData, PagoResultData } from "../shared/types";
 
@@ -52,6 +52,8 @@ function reducer(state: CheckoutState, action: Action): CheckoutState {
 
 interface CheckoutContextValue {
   state: CheckoutState;
+  isPaying: boolean;
+  setIsPaying: (v: boolean) => void;
   setQrCode: (code: string) => void;
   ticketLoaded: (data: ConsultaMontoData) => void;
   paymentSuccess: (result: PagoResultData) => void;
@@ -63,9 +65,12 @@ export const CheckoutContext = createContext<CheckoutContextValue | null>(null);
 
 export function CheckoutProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [isPaying, setIsPaying] = useState(false);
 
   const value: CheckoutContextValue = {
     state,
+    isPaying,
+    setIsPaying,
     setQrCode: (code) => dispatch({ type: "SET_QR_CODE", payload: code }),
     ticketLoaded: (data) => dispatch({ type: "TICKET_LOADED", payload: data }),
     paymentSuccess: (result) =>

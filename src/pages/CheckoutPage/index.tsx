@@ -55,7 +55,7 @@ export default function CheckoutPage() {
       <p className="text-4xl font-bold text-white mb-10">¿Desea factura?</p>
 
       {/* Botones */}
-      <div className="flex gap-6 w-full max-w-lg">
+      <div className="flex gap-6 w-full max-w-2xl">
         <button
           onClick={() => navigate("/factura")}
           className="flex-1 py-10 rounded-3xl text-4xl font-black bg-green-500 text-white shadow-2xl shadow-green-900/50 transition-all active:scale-95"
@@ -70,7 +70,7 @@ export default function CheckoutPage() {
         </button>
       </div>
 
-      <Button variant="back" className="mt-4 max-w-lg" onClick={() => navigate("/")}>
+      <Button variant="back" className="mt-4 max-w-2xl" onClick={() => navigate("/")}>
         Cancelar
       </Button>
     </div>
