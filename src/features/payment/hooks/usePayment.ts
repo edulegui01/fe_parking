@@ -17,13 +17,20 @@ export function usePayment() {
     setLoading(true);
     setIsPaying(true);
 
+    const detectedIp = window.location.hostname;
+    const ip_address = detectedIp === 'localhost' || detectedIp === '127.0.0.1'
+      ? (import.meta.env.VITE_IP_ADDRESS ?? '')
+      : detectedIp;
+
     const payload: PagoData = {
       ticket_code: state.ticketData.codigo_ticket,
       monto: state.ticketData.monto_total,
-      id_expediente: state.ticketData.paciente.id_expediente || undefined,
-      ruc: factura?.ruc || undefined,
-      a_nombre_de: factura?.razon_social || undefined,
-      correo_electronico: factura?.email || undefined,
+      id_expediente: state.ticketData.paciente.id_expediente ?? null,
+      ruc: factura?.ruc ?? '',
+      a_nombre_de: factura?.razon_social ?? '',
+      correo_electronico: factura?.email ?? '',
+      ip_address,
+      hostname: import.meta.env.VITE_HOSTNAME ?? '',
     };
 
     try {

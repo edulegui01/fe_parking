@@ -26,40 +26,42 @@ export default function IdlePage() {
   }, [navigate, setQrCode]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-navy-900 select-none overflow-hidden">
+    <div className="flex flex-col items-center justify-center h-screen select-none overflow-hidden">
       <div className="flex flex-col items-center gap-10">
 
         {/* Ícono QR */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          className="w-28 h-28 text-ocean-400"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none" />
-          <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none" />
-          <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none" />
-          <line x1="14" y1="14" x2="14" y2="14.01" strokeWidth="2.5" />
-          <line x1="17" y1="14" x2="21" y2="14" />
-          <line x1="21" y1="14" x2="21" y2="17" />
-          <line x1="14" y1="17" x2="17" y2="17" />
-          <line x1="17" y1="17" x2="17" y2="21" />
-          <line x1="14" y1="21" x2="21" y2="21" />
-        </svg>
+        <div className="w-64 h-64 rounded-full bg-brand-blue-pale flex items-center justify-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className="w-36 h-36 text-brand-blue"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none" />
+            <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none" />
+            <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none" />
+            <line x1="14" y1="14" x2="14" y2="14.01" strokeWidth="2.5" />
+            <line x1="17" y1="14" x2="21" y2="14" />
+            <line x1="21" y1="14" x2="21" y2="17" />
+            <line x1="14" y1="17" x2="17" y2="17" />
+            <line x1="17" y1="17" x2="17" y2="21" />
+            <line x1="14" y1="21" x2="21" y2="21" />
+          </svg>
+        </div>
 
         {/* Mensaje */}
         <div className="text-center">
-          <p className="text-5xl font-bold text-white leading-snug">
+          <p className="text-7xl font-bold text-brand-blue leading-snug">
             Coloque el código QR
           </p>
-          <p className="text-5xl font-bold text-white leading-snug">
+          <p className="text-7xl font-bold text-brand-blue leading-snug">
             en el lector
           </p>
         </div>
@@ -71,7 +73,7 @@ export default function IdlePage() {
               key={i}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 12"
-              className="w-14 h-7 text-ocean-400"
+              className="w-14 h-7 text-brand-green"
               style={{
                 animation: "bounce-fade 1.4s ease-in-out infinite",
                 animationDelay: `${i * 0.2}s`,

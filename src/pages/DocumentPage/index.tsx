@@ -49,25 +49,26 @@ export default function DocumentPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
-      <p className="text-6xl font-black text-white mb-3 tracking-tight">Documento</p>
-      <p className="text-2xl text-slate-400 mb-10">Ingrese su cédula sin puntos</p>
+    <div className="flex flex-col items-center justify-center min-h-screen select-none px-10 py-10">
+      <p className="text-6xl font-black text-brand-blue mb-3 tracking-tight">Documento</p>
+      <p className="text-2xl text-gray-400 mb-10">Ingrese su cédula sin puntos</p>
 
       {/* Display */}
       <div
-        className={`w-full max-w-2xl py-8 px-8 rounded-3xl border-2 text-center mb-4 transition-all duration-200 bg-navy-800 ${
-          error ? "border-red-500" : documento ? "border-ocean-400" : "border-white/10"
+        className={`w-full max-w-2xl py-8 px-8 rounded-3xl border-2 text-center mb-4 transition-all duration-200 bg-white ${
+          error ? "border-red-400" : documento ? "border-brand-blue" : "border-gray-200"
         }`}
+        style={{ boxShadow: documento && !error ? "0 0 0 4px rgba(30,63,138,0.08)" : undefined }}
       >
-        <p className="text-7xl font-mono font-black tracking-widest min-h-[80px] text-white">
-          {documento || <span className="text-slate-600">———</span>}
+        <p className="text-7xl font-mono font-black tracking-widest min-h-[80px] text-brand-blue">
+          {documento || <span className="text-gray-300">———</span>}
         </p>
       </div>
 
       <div className="h-10 flex items-center mb-6">
         {error && (
-          <div className="flex items-center gap-2 bg-red-900/40 border border-red-700 rounded-2xl px-5 py-2">
-            <span className="text-red-400 text-xl font-medium">{error}</span>
+          <div className="flex items-center gap-2 bg-red-50 border border-red-300 rounded-2xl px-5 py-2">
+            <span className="text-red-600 text-xl font-medium">{error}</span>
           </div>
         )}
       </div>
@@ -84,10 +85,10 @@ export default function DocumentPage() {
                 className={[
                   "flex-1 h-28 rounded-3xl text-5xl font-bold transition-all duration-100 active:scale-90 disabled:opacity-40",
                   key === "←"
-                    ? "bg-red-900/60 text-red-400 border-2 border-red-800 active:bg-red-900"
+                    ? "bg-red-50 text-red-500 border-2 border-red-200 active:bg-red-100"
                     : key === "C"
-                    ? "bg-amber-900/60 text-amber-400 border-2 border-amber-800 active:bg-amber-900"
-                    : "bg-navy-700 text-white border border-white/10 active:bg-navy-600 shadow-lg shadow-black/40",
+                    ? "bg-amber-50 text-amber-600 border-2 border-amber-200 active:bg-amber-100"
+                    : "bg-brand-blue-pale text-brand-blue border border-blue-100 active:bg-blue-100 shadow-sm",
                 ].join(" ")}
               >
                 {key === "C" ? <span className="text-2xl">Limpiar</span> : key}
@@ -101,7 +102,7 @@ export default function DocumentPage() {
       <button
         onClick={handleConfirm}
         disabled={!canConfirm}
-        className="w-full max-w-2xl py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-ocean-400 text-white shadow-xl shadow-ocean-400/20 disabled:shadow-none"
+        className="w-full max-w-2xl py-8 rounded-3xl text-3xl font-black transition-all active:scale-95 disabled:opacity-30 bg-brand-blue text-white shadow-lg shadow-brand-blue/20 disabled:shadow-none"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-3">

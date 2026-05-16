@@ -24,26 +24,26 @@ export default function PaymentPage() {
   if (!state.ticketData) return null;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-navy-900 select-none px-10 py-10">
-      <p className="text-6xl font-black text-white mb-3 tracking-tight">Pago</p>
-      <p className="text-2xl text-slate-400 mb-14">Seleccione un método de pago</p>
+    <div className="flex flex-col items-center justify-center min-h-screen select-none px-10 py-10">
+      <p className="text-6xl font-black text-brand-blue mb-3 tracking-tight">Pago</p>
+      <p className="text-2xl text-gray-400 mb-14">Seleccione un método de pago</p>
 
       <div className="flex flex-col gap-5 w-full max-w-2xl">
         {/* Tarjeta */}
         <button
           onClick={() => pay('card' as const)}
           disabled={loading || isDone}
-          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-blue-500 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
+          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-white border-2 border-gray-200 hover:border-brand-blue hover:bg-brand-blue-pale transition-all active:scale-95 disabled:opacity-40 shadow-sm"
         >
-          <div className="w-20 h-20 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
-            <svg className="w-10 h-10 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="w-20 h-20 rounded-2xl bg-brand-blue-pale flex items-center justify-center flex-shrink-0">
+            <svg className="w-10 h-10 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <rect x="2" y="5" width="20" height="14" rx="2" />
               <path strokeLinecap="round" d="M2 10h20" />
             </svg>
           </div>
           <div className="text-left">
-            <p className="text-3xl font-black text-white">Tarjeta</p>
-            <p className="text-slate-400 text-xl mt-1">Débito o crédito</p>
+            <p className="text-3xl font-black text-gray-900">Tarjeta</p>
+            <p className="text-gray-400 text-xl mt-1">Débito o crédito</p>
           </div>
         </button>
 
@@ -51,10 +51,10 @@ export default function PaymentPage() {
         <button
           onClick={() => pay('qr' as const)}
           disabled={loading || isDone}
-          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-navy-800 border border-white/10 active:border-ocean-400 active:bg-navy-700 transition-all active:scale-95 disabled:opacity-40"
+          className="flex items-center gap-8 w-full px-10 py-9 rounded-3xl bg-white border-2 border-gray-200 hover:border-brand-green hover:bg-brand-green-pale transition-all active:scale-95 disabled:opacity-40 shadow-sm"
         >
-          <div className="w-20 h-20 rounded-2xl bg-ocean-400/20 border border-ocean-400/30 flex items-center justify-center flex-shrink-0">
-            <svg className="w-10 h-10 text-ocean-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div className="w-20 h-20 rounded-2xl bg-brand-green-pale flex items-center justify-center flex-shrink-0">
+            <svg className="w-10 h-10 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <rect x="3" y="3" width="7" height="7" rx="1" />
               <rect x="14" y="3" width="7" height="7" rx="1" />
               <rect x="3" y="14" width="7" height="7" rx="1" />
@@ -70,19 +70,19 @@ export default function PaymentPage() {
             </svg>
           </div>
           <div className="text-left">
-            <p className="text-3xl font-black text-white">Código QR</p>
-            <p className="text-slate-400 text-xl mt-1">Escaneá con tu app de pagos</p>
+            <p className="text-3xl font-black text-gray-900">Código QR</p>
+            <p className="text-gray-400 text-xl mt-1">Escaneá con tu app de pagos</p>
           </div>
         </button>
       </div>
 
       {loading && (
-        <div className="mt-10 flex items-center gap-3 bg-navy-800 border border-white/10 rounded-2xl px-7 py-4">
-          <svg className="animate-spin w-6 h-6 text-ocean-400" fill="none" viewBox="0 0 24 24">
+        <div className="mt-10 flex items-center gap-3 bg-brand-blue-pale border border-blue-100 rounded-2xl px-7 py-4">
+          <svg className="animate-spin w-6 h-6 text-brand-blue" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <p className="text-slate-300 text-xl font-medium">Procesando pago...</p>
+          <p className="text-brand-blue text-xl font-semibold">Procesando pago...</p>
         </div>
       )}
 
@@ -92,28 +92,28 @@ export default function PaymentPage() {
 
       {/* Modal de resultado */}
       {isDone && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
-          <div className="flex flex-col items-center gap-6 text-center bg-navy-800 border border-white/10 rounded-3xl px-14 py-12 mx-6">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="flex flex-col items-center gap-6 text-center bg-white border border-gray-200 rounded-3xl px-14 py-12 mx-6 shadow-2xl">
 
             {/* Ícono */}
             <div className="relative flex items-center justify-center">
               {isSuccess && (
                 <div
-                  className="absolute w-36 h-36 rounded-full bg-green-500/10 animate-ping"
+                  className="absolute w-36 h-36 rounded-full bg-brand-green/10 animate-ping"
                   style={{ animationDuration: '2s' }}
                 />
               )}
               <div className={`relative w-28 h-28 rounded-full flex items-center justify-center ${
                 isSuccess
-                  ? 'bg-green-500/15 border-2 border-green-500/60'
-                  : 'bg-red-500/15 border-2 border-red-500/60'
+                  ? 'bg-brand-green-pale border-2 border-brand-green/40'
+                  : 'bg-red-50 border-2 border-red-300'
               }`}>
                 {isSuccess ? (
-                  <svg className="w-16 h-16 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="w-16 h-16 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
-                  <svg className="w-16 h-16 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <svg className="w-16 h-16 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 )}
@@ -121,23 +121,23 @@ export default function PaymentPage() {
             </div>
 
             {/* Mensaje */}
-            <h2 className={`text-4xl font-black tracking-tight ${isSuccess ? 'text-green-400' : 'text-red-400'}`}>
+            <h2 className={`text-4xl font-black tracking-tight ${isSuccess ? 'text-brand-green' : 'text-red-500'}`}>
               {isSuccess ? '¡Pago exitoso!' : 'Error en el pago'}
             </h2>
 
             {isSuccess && state.paymentResult && (
-              <p className="text-2xl font-mono font-bold text-slate-300 tracking-widest">
+              <p className="text-2xl font-mono font-bold text-gray-600 tracking-widest">
                 #{state.paymentResult.codigo_ticket}
               </p>
             )}
 
             {!isSuccess && (
-              <p className="text-lg text-slate-400">
+              <p className="text-lg text-gray-500">
                 {state.error ?? 'Ocurrió un error. Intente nuevamente.'}
               </p>
             )}
 
-            <p className="text-slate-600 text-sm">Volviendo al inicio...</p>
+            <p className="text-gray-400 text-sm">Volviendo al inicio...</p>
           </div>
         </div>
       )}

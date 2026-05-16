@@ -1,0 +1,136 @@
+====================================================
+  INSTALAR Y CONFIGURAR PM2 EN WINDOWS - fe_lacosta
+====================================================
+
+REQUISITOS PREVIOS
+------------------
+- Node.js instalado (v18 o superior recomendado)
+- npm disponible en el PATH
+- Proyecto clonado y con dependencias instaladas
+
+
+PASO 1 - Instalar PM2 y serve globalmente
+------------------------------------------
+Abrir PowerShell o CMD como Administrador y ejecutar:
+
+    npm install -g pm2
+    npm install -g pm2-windows-startup
+    npm install -g serve
+
+"serve" es el servidor estatico que PM2 usa para servir el build de produccion.
+El ecosystem.config.cjs ya esta configurado para usarlo automaticamente.
+
+
+PASO 2 - Instalar el servicio de startup en Windows
+-----------------------------------------------------
+Esto hace que PM2 arranque automaticamente cuando el sistema inicia.
+
+En PowerShell como Administrador:
+
+    pm2-startup install
+
+Si el comando anterior falla, usar el metodo alternativo con pm2-windows-service:
+
+    npm install -g pm2-windows-service
+    pm2-service-install
+
+    Luego cuando pregunte por el nombre del servicio, presionar Enter para aceptar
+    el nombre por defecto (PM2).
+
+
+PASO 3 - Crear el archivo .env
+--------------------------------
+En la carpeta del proyecto, copiar el archivo de ejemplo:
+
+    copy .env.example .env
+
+Editar .env con el editor de texto y setear la URL del backend:
+
+    VITE_API_URL=http://localhost:3000/api
+
+(Cambiar la URL si el backend corre en otra maquina o puerto)
+
+
+PASO 4 - Construir el proyecto
+--------------------------------
+Desde la carpeta del proyecto ejecutar:
+
+    npm install
+    npm run build
+
+Esto genera la carpeta dist/ con los archivos estaticos listos para produccion.
+
+
+PASO 5 - Iniciar la aplicacion con PM2
+----------------------------------------
+Desde la carpeta del proyecto:
+
+    pm2 start ecosystem.config.cjs
+
+Verificar que este corriendo:
+
+    pm2 list
+    pm2 logs fe_lacosta
+
+La app queda disponible en: http://localhost:4173
+(o la IP de la maquina si se necesita acceder desde otro dispositivo)
+
+
+PASO 6 - Guardar el estado de PM2
+-----------------------------------
+Para que PM2 recuerde los procesos activos y los relance al reiniciar:
+
+    pm2 save
+
+
+COMANDOS UTILES DE PM2
+------------------------
+Ver estado de todos los procesos:
+    pm2 list
+
+Ver logs en tiempo real:
+    pm2 logs fe_lacosta
+
+Reiniciar la app:
+    pm2 restart fe_lacosta
+
+Detener la app:
+    pm2 stop fe_lacosta
+
+Eliminar la app de PM2:
+    pm2 delete fe_lacosta
+
+Recargar sin downtime (recomendado para actualizar):
+    npm run build && pm2 restart fe_lacosta
+
+Ver info detallada:
+    pm2 show fe_lacosta
+
+
+ACTUALIZACION DEL PROYECTO
+----------------------------
+Cada vez que haya cambios en el codigo:
+
+    1. git pull                    (bajar cambios)
+    2. npm install                 (si hay nuevas dependencias)
+    3. npm run build               (recompilar)
+    4. pm2 restart fe_lacosta      (reiniciar el servidor)
+
+
+NOTAS IMPORTANTES
+------------------
+- El proyecto usa "serve" para servir el build de produccion.
+  Esto NO es un servidor de produccion completo; es suficiente para un
+  kiosk en red local pero no reemplaza nginx/IIS para uso publico.
+
+- El puerto por defecto es 4173. Si necesitas cambiarlo, editar el
+  archivo ecosystem.config.cjs y cambiar el argumento "-l 4173" al
+  puerto deseado, luego reiniciar con: pm2 restart fe_lacosta
+
+- Si Windows Firewall bloquea el acceso desde otros dispositivos, agregar
+  una regla de entrada para el puerto 4173 (o el que uses).
+
+- El archivo ecosystem.config.cjs ya esta configurado en el proyecto.
+  No es necesario crearlo manualmente.
+
+====================================================

@@ -78,10 +78,12 @@ export type RegistrarEgresoData = ContribuyenteData;
 export interface PagoData {
   ticket_code: string;
   monto: number;
-  id_expediente?: number;
-  ruc?: string;
-  a_nombre_de?: string;
-  correo_electronico?: string;
+  id_expediente: number | null;
+  ruc: string;
+  a_nombre_de: string;
+  correo_electronico: string;
+  ip_address: string;
+  hostname: string;
 }
 
 /** POST /pago/tarjeta  |  POST /pago/qr — respuesta */
@@ -133,6 +135,27 @@ export interface BancardPagoQrData {
   nombreTarjeta: string;
   nroBoleta: string;
   saldo: number;
+}
+
+// ── NFC TAG ──────────────────────────────────────────────────────────────────
+
+export interface NfcTag {
+  id: number;
+  nfc_code: string;
+  enable: boolean;
+  owner: string;
+}
+
+export interface CreateNfcTagPayload {
+  nfc_code: string;
+  enable: boolean;
+  owner: string;
+}
+
+export interface UpdateNfcTagPayload {
+  nfc_code?: string;
+  enable?: boolean;
+  owner?: string;
 }
 
 // ── Legacy (mantener compatibilidad) ─────────────────────────────────────────
