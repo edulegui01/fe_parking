@@ -125,12 +125,6 @@ export default function PaymentPage() {
               {isSuccess ? '¡Pago exitoso!' : 'Error en el pago'}
             </h2>
 
-            {isSuccess && state.paymentResult && (
-              <p className="text-2xl font-mono font-bold text-gray-600 tracking-widest">
-                #{state.paymentResult.codigo_ticket}
-              </p>
-            )}
-
             {!isSuccess && (
               <p className="text-lg text-gray-500">
                 {state.error ?? 'Ocurrió un error. Intente nuevamente.'}

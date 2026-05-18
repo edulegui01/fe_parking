@@ -37,10 +37,11 @@ const ALPHA_ROWS = [
 ];
 
 const EMAIL_ROWS = [
+  ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
   ["z", "x", "c", "v", "b", "n", "m", "@", "."],
-  ["←", "_", "-", ".com", "SPACE"],
+  ["←", "_", "-", ".com"],
 ];
 
 type Step = "ruc" | "email_only" | "full_details";
@@ -186,7 +187,6 @@ export default function FacturaPage() {
   const handleEmailKey = (key: string) => {
     setEmail((p) => {
       if (key === "←") return p.slice(0, -1);
-      if (key === "SPACE") return p + " ";
       if (key === ".com") return p + ".com";
       return p.length < 60 ? p + key : p;
     });
