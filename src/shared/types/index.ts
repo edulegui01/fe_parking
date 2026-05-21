@@ -40,6 +40,7 @@ export interface ConsultaMontoData {
   monto_iva: number | null;
   monto_gravado: number | null;
   monto_total: number;
+  mensaje: string;
   tiempo_transcurrido: string;
   facturado: string;
   facturas: {

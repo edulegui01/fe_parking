@@ -18,6 +18,7 @@ export default function DocumentPage() {
   const [documento, setDocumento] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const { state: { qrCode }, ticketLoaded } = useCheckout();
 
@@ -31,7 +32,13 @@ export default function DocumentPage() {
       const res = await api.get<ApiResponse<ConsultaMontoData>>(
         `/ticket/consulta-monto?ticket_code=${encodeURIComponent(qrCode)}&documento=${encodeURIComponent(documento)}`,
       );
-      ticketLoaded(res.data!);
+      const data = res.data!;
+      if (data.monto_total === 0) {
+        setInfoMessage(data.mensaje);
+        setTimeout(() => { setInfoMessage(null); navigate("/"); }, 4000);
+        return;
+      }
+      ticketLoaded(data);
       navigate("/checkout");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al consultar el ticket");
@@ -118,6 +125,22 @@ export default function DocumentPage() {
       <Button variant="back" className="mt-4 max-w-2xl" disabled={loading} onClick={() => navigate("/")}>
         Cancelar
       </Button>
+
+      {/* Modal monto cero */}
+      {infoMessage && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="flex flex-col items-center gap-6 text-center bg-white border border-gray-200 rounded-3xl px-14 py-12 mx-6 shadow-2xl max-w-lg w-full">
+            <div className="w-28 h-28 rounded-full flex items-center justify-center bg-brand-green-pale border-2 border-brand-green/40">
+              <svg className="w-16 h-16 text-brand-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-4xl font-black text-brand-green">Atención</h2>
+            <p className="text-2xl text-gray-600 leading-snug">{infoMessage}</p>
+            <p className="text-gray-400 text-lg">Volviendo al inicio...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
