@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, ApiError } from "../../shared/services/api";
+import { useCheckout } from "@/store/checkout.hook";
 import { Button } from "../../shared/components/Button";
 import type { ApiResponse, ContribuyenteData } from "../../shared/types";
 
@@ -128,6 +129,7 @@ function PinKey({ keyVal, onClick }: { keyVal: string; onClick: () => void }) {
 
 export default function FacturaPage() {
   const navigate = useNavigate();
+  const { state: { ticketData } } = useCheckout();
 
   const [rucBase, setRucBase] = useState("");
   const [loading, setLoading] = useState(false);
@@ -135,7 +137,7 @@ export default function FacturaPage() {
 
   const [step, setStep] = useState<Step>("ruc");
   const [razonSocial, setRazonSocial] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(ticketData?.paciente.email ?? "");
   const [activeField, setActiveField] = useState<DetailField>("razon");
 
   const dv = calcularDV(rucBase);
