@@ -5,10 +5,16 @@ import { useCheckout } from "@/store/checkout.hook";
 import { Button } from "../../shared/components/Button";
 import type { ApiResponse, ContribuyenteData } from "../../shared/types";
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+// Mismas reglas que aplica la base al generar la factura. Validar acá, antes del
+// cobro: si la base rechaza el correo, la tarjeta ya está cobrada y no se deshace.
+const EMAIL_MAX_LENGTH = 80;
+const EMAIL_REGEX = /^[0-9A-Za-z]+[A-Za-z0-9._-]+@[A-Za-z0-9]+[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
+/** El correo es opcional: vacío es válido. */
 function validarEmail(email: string): boolean {
-  return EMAIL_REGEX.test(email.trim());
+  const value = email.trim();
+  if (!value) return true;
+  return value.length <= EMAIL_MAX_LENGTH && EMAIL_REGEX.test(value);
 }
 
 function calcularDV(base: string): string {
@@ -44,6 +50,8 @@ const EMAIL_ROWS = [
   ["z", "x", "c", "v", "b", "n", "m", "@", "."],
   ["←", "_", "-", ".com"],
 ];
+
+const EMAIL_INVALIDO_MSG = "Correo no válido. Corríjalo o déjelo vacío.";
 
 type Step = "ruc" | "email_only" | "full_details";
 type DetailField = "razon" | "email";
@@ -137,17 +145,16 @@ export default function FacturaPage() {
 
   const [step, setStep] = useState<Step>("ruc");
   const [razonSocial, setRazonSocial] = useState("");
-  const [email, setEmail] = useState(ticketData?.paciente.email ?? "");
+  const [email, setEmail] = useState((ticketData?.paciente.email ?? "").trim());
+  const [emailError, setEmailError] = useState<string | null>(null);
   const [activeField, setActiveField] = useState<DetailField>("razon");
 
   const dv = calcularDV(rucBase);
   const rucFormateado = rucBase ? `${rucBase}-${dv}` : "";
   const canConfirmRuc = rucBase.length > 0 && !loading;
 
-  const canConfirmDetails =
-    step === "email_only"
-      ? validarEmail(email)
-      : razonSocial.trim().length > 0 && validarEmail(email);
+  // El correo se valida al confirmar, para poder mostrar el error en vez de solo deshabilitar
+  const canConfirmDetails = step === "email_only" || razonSocial.trim().length > 0;
 
   const handleNumKey = (key: string) => {
     setError(null);
@@ -187,17 +194,24 @@ export default function FacturaPage() {
   };
 
   const handleEmailKey = (key: string) => {
+    setEmailError(null);
     setEmail((p) => {
       if (key === "←") return p.slice(0, -1);
-      if (key === ".com") return p + ".com";
-      return p.length < 60 ? p + key : p;
+      const next = p + key;
+      return next.length <= EMAIL_MAX_LENGTH ? next : p;
     });
   };
 
   const handleConfirmarDetails = () => {
     if (!canConfirmDetails) return;
+    const emailFinal = email.trim();
+    if (!validarEmail(emailFinal)) {
+      setEmailError(EMAIL_INVALIDO_MSG);
+      setActiveField("email");
+      return;
+    }
     navigate("/payment", {
-      state: { factura: { ruc: rucFormateado, razon_social: razonSocial, email } },
+      state: { factura: { ruc: rucFormateado, razon_social: razonSocial, email: emailFinal } },
     });
   };
 
@@ -212,6 +226,16 @@ export default function FacturaPage() {
         : "bg-brand-blue-pale text-brand-blue border border-blue-100 active:bg-blue-100",
     ].join(" ");
   };
+
+  const emailErrorBox = (
+    <div className="h-14 flex items-center justify-center w-full max-w-2xl mb-2">
+      {emailError && (
+        <div className="flex items-center gap-2 bg-red-50 border border-red-300 rounded-2xl px-5 py-2">
+          <span className="text-red-600 text-xl font-medium">{emailError}</span>
+        </div>
+      )}
+    </div>
+  );
 
   // ── Step 1: RUC ──────────────────────────────────────────────────────────────
 
@@ -294,9 +318,9 @@ export default function FacturaPage() {
       <div className="flex flex-col items-center justify-center min-h-screen select-none px-10 py-10">
         <StepIndicator current={1} total={3} />
         <p className="text-6xl font-black text-brand-blue mt-8 mb-2 tracking-tight">Factura</p>
-        <p className="text-2xl text-gray-400 mb-8">Ingrese su correo electrónico</p>
+        <p className="text-2xl text-gray-400 mb-8">Ingrese su correo electrónico (opcional)</p>
 
-        <div className="flex flex-col gap-4 w-full max-w-2xl mb-8">
+        <div className="flex flex-col gap-4 w-full max-w-2xl mb-4">
           {/* Razón social — readonly con check */}
           <div className="flex items-center gap-4 px-8 py-6 rounded-3xl border-2 border-brand-green bg-brand-green-pale">
             <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand-green flex items-center justify-center">
@@ -314,11 +338,13 @@ export default function FacturaPage() {
           <FieldCard
             label="Correo electrónico"
             value={email}
-            placeholder="———"
+            placeholder="Opcional"
             mono
             active
           />
         </div>
+
+        {emailErrorBox}
 
         {/* Teclado email */}
         <div className="flex flex-col gap-2.5 w-full max-w-2xl mb-6">
@@ -372,13 +398,16 @@ export default function FacturaPage() {
           onClick={() => setActiveField("razon")}
         />
         <FieldCard
-          label="Correo electrónico"
+          label="Correo electrónico (opcional)"
           value={email}
+          placeholder="Opcional"
           active={activeField === "email"}
           mono
           onClick={() => setActiveField("email")}
         />
       </div>
+
+      {activeField === "email" && emailErrorBox}
 
       {/* Teclado razón social */}
       {activeField === "razon" && (
