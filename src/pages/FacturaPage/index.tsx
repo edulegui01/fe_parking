@@ -53,6 +53,10 @@ const EMAIL_ROWS = [
 
 const EMAIL_INVALIDO_MSG = "Correo no válido. Corríjalo o déjelo vacío.";
 
+const RUC_MIN_LENGTH = 3;
+const RUC_MAX_LENGTH = 9;
+const RUC_INVALIDO_MSG = `El RUC debe tener entre ${RUC_MIN_LENGTH} y ${RUC_MAX_LENGTH} dígitos.`;
+
 type Step = "ruc" | "email_only" | "full_details";
 type DetailField = "razon" | "email";
 
@@ -160,11 +164,15 @@ export default function FacturaPage() {
     setError(null);
     if (key === "←") setRucBase((p) => p.slice(0, -1));
     else if (key === "C") setRucBase("");
-    else if (rucBase.length < 15) setRucBase((p) => p + key);
+    else if (rucBase.length < RUC_MAX_LENGTH) setRucBase((p) => p + key);
   };
 
   const handleConsultar = async () => {
     if (!canConfirmRuc) return;
+    if (rucBase.length < RUC_MIN_LENGTH || rucBase.length > RUC_MAX_LENGTH) {
+      setError(RUC_INVALIDO_MSG);
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
